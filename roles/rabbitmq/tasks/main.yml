@@ -1,0 +1,26 @@
+---
+- name: Install RabbitMQ
+  apt:
+    name: rabbitmq-server
+    update_cache: yes
+    state: present
+
+- name: Create user with full access
+  rabbitmq_user:
+    user: "jotmon"
+    password: "12345"
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+
+- name: Download rabbitmq-delayed-message-exchange v3.8
+  get_url:
+    url: https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.8.0/rabbitmq_delayed_message_exchange-3.8.0.ez
+    dest: /usr/lib/rabbitmq/lib/rabbitmq_server-3.8.2/plugins/
+
+- name: Enable rabbitmq-delayed-message-exchange v3.8
+  rabbitmq_plugin:
+    names: rabbitmq_delayed_message_exchange
+    state: enabled

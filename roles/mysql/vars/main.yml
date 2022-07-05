@@ -1,0 +1,8 @@
+mysql_root_username: "root"
+mysql_root_password: "password"
+mysql_login_host: "localhost"
+mysql_login_user: "root"
+mysql_login_password: "password"
+mysql_client_username: "root"
+mysql_client_password: "password"
+mysql_db_name: "jotping"

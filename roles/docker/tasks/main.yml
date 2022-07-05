@@ -1,0 +1,10 @@
+- name: docker install
+  apt:
+    name: 
+      - docker.io
+    state: latest
+
+- name: DOcker user to the docker group
+  user:
+    name: baran
+    groups: docker

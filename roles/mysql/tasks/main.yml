@@ -1,0 +1,54 @@
+- name: install python3-pip
+  apt:
+    name: python3-pip
+    update_cache: yes
+    state: present
+    force_apt_get: yes
+
+- name: Make sure pymysql is present
+  become: true
+  pip:
+    name: pymysql
+    state: present
+
+- name: install MySQL
+  apt:
+    name: mysql-server
+    update_cache: yes
+    state: present
+
+- name: Sets the root password
+  mysql_user:
+    login_host: "{{ mysql_login_host }}"
+    login_user: "{{ mysql_login_user }}"
+    login_password: "{{ mysql_login_password }}"
+    name: "{{ mysql_root_username }}"
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
+
+- name: Removes all anonymous user accounts
+  mysql_user:
+    user: "{{ mysql_root_username }}"
+    name: ""
+    host_all: yes
+    state: absent
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_root_password }}"
+
+- name: "Create a new database with name {{ mysql_db_name }}"
+  mysql_db:
+    name: jotping
+    state: present
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_root_password }}"
+
+- name: create mysql client user
+  mysql_user:
+    login_user: "{{ mysql_login_user }}"
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ mysql_client_username }}"
+    password: "{{ mysql_client_password }}"
+    priv: "{{ mysql_db_name }}.*:ALL,GRANT"
+    state: present
+    host: "%"
