@@ -1,0 +1,43 @@
+- name: Update packages
+  become: true
+  apt:
+    upgrade: true
+    update_cache: true
+
+- name: Add Elasticsearch apt key
+  become: true
+  apt_key:
+   url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+   state: present
+
+- name: Adding Elasticsearch repo
+  become: true
+  apt_repository:
+   repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+   state: present
+
+- name: Install Elasticsearch
+  become: true
+  apt:
+   name: elasticsearch
+   update_cache: true
+
+- name: Update Elastic Config (IP Address to 0.0.0.0)
+  become: true
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: "network.host"
+    line: "network.host: 0.0.0.0"
+
+- name: Updating Elastic Config (Port Number)
+  become: true
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: "http.port"
+    line: "http.port: 9200"
+
+- name: Start ElasticSearch Service
+  become: true
+  service:
+    name: elasticsearch
+    state: started

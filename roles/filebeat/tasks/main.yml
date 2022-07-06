@@ -1,0 +1,11 @@
+- name: Install Filebeat with apt
+  become: true
+  apt:
+   name: filebeat
+   update_cache: true
+
+- name: Starting Filebeat
+  become: true
+  service:
+   name: filebeat
+   state: started

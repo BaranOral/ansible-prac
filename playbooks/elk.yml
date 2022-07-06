@@ -1,0 +1,16 @@
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: update server
+      apt: 
+        update_cache: true
+        upgrade: dist
+
+- hosts: elk
+  become: true
+  roles:
+    - java
+    - elasticsearch
+    - logstash
+    - kibana
+
