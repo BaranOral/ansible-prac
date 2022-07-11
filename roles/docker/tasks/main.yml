@@ -1,10 +1,36 @@
-- name: docker install
+- name: neccesary packages for installing
+  become: true
   apt:
-    name: 
-      - docker.io
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
     state: latest
+    update_cache: true
 
-- name: DOcker user to the docker group
-  user:
-    name: baran
-    groups: docker
+- name: docker GPG key is installed
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+
+- name: download from apt reporosirt
+  become: true
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: install docker
+  become: true
+  apt:
+    name: docker-ce
+    update_cache: true
+
+- name: start docker
+  become: true
+  service:
+    name: docker
+    state: started
+    enabled: true

@@ -9,7 +9,6 @@
 - hosts: webservers
   become: true
   roles:
-    - docker
     - nginx
     - mysql
     - rabbitmq

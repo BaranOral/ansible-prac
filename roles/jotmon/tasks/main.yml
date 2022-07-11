@@ -1,0 +1,16 @@
+---
+
+- name: add jotmon user
+  become: true 
+  user: 
+    name: jotmon
+    password: "jotmon"
+    home: /home/jotmon
+    shell: /bin/bash
+    group: sudo
+
+- name: change ownership
+  become: true
+  file: 
+    path: /home/jotmon
+    owner: jotmon

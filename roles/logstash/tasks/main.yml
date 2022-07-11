@@ -1,12 +1,21 @@
+- name: Apt transport package
+  become: true
+  apt:
+    name: apt-transport-https
+    state: latest
+    update_cache: true
+
 - name: Download Logstash Deb Package
-  get_url:
-    url: https://artifacts.elastic.co/downloads/logstash/logstash-7.6.2.deb
-    dest: /tmp
+  apt_repository:
+   repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+   state: present
+
 
 - name: Install Logstash Deb Package
   become: yes
   apt:
-    deb: /tmp/logstash-7.6.2.deb
+    name: logstash
+    update_cache: true
 
 - name: Create Logstash Pipeline File
   become: yes
